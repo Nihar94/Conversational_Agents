@@ -93,8 +93,8 @@ if __name__ == '__main__':
     height = int(video.get(cv2.CAP_PROP_FRAME_HEIGHT)) # float
 
     # Define the codec and create VideoWriter object
-    fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-    out = cv2.VideoWriter('output/video/output-%s.avi' % args.output_string, fourcc, args.fps, (width, height))
+    # fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+    # out = cv2.VideoWriter('output/video/output-%s.avi' % args.output_string, fourcc, args.fps, (width, height))
 
     # # Old cv2
     # width = int(video.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH))   # float
@@ -107,6 +107,7 @@ if __name__ == '__main__':
     txt_out = open('output/video/output-%s.txt' % args.output_string, 'w')
 
     frame_num = 1
+    import matplotlib.pyplot as plt
 
     while frame_num <= args.n_frames:
         print(frame_num)
@@ -168,9 +169,15 @@ if __name__ == '__main__':
                 utils.draw_axis(frame, yaw_predicted, pitch_predicted, roll_predicted, tdx = (x_min + x_max) / 2, tdy= (y_min + y_max) / 2, size = bbox_height/2)
                 # Plot expanded bounding box
                 # cv2.rectangle(frame, (int(x_min), int(y_min)), (int(x_max), int(y_max)), (0,255,0), 1)
-
-        out.write(frame)
+                
+                cv2.imshow('video',frame)
+                k = cv2.waitKey(1) & 0xFF
+                if( k ==ord('q')):
+                    cv2.destroyWindow('video')
+                    video.release()
+                    cv2.destroyAllWindows()
+                    break
+        #out.write(frame)
         frame_num += 1
         
-    out.release()
-    video.release()
+    #out.release()
